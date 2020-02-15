@@ -23,5 +23,5 @@ public class ItemComponent : MonoBehaviour, IObjectDestroyer
 }
 public enum ItemType
 {
-    HealthPotion = 1, DamagePotion = 2, DefensePotion = 3
+    DamagePotion = 1, ForcePotion = 2,  DefensePotion = 3
 }
