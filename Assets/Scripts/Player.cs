@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Globalization;
+using UnityEngine.UI;
+using System;
 
 public class Player : GroundDetection
 {
@@ -53,6 +55,7 @@ public class Player : GroundDetection
     [SerializeField] private int arrowForce;
     [SerializeField] private int arrowsCount = 3;
     [SerializeField] private BuffReciever buffReciever;
+    [SerializeField] private GameObject rechargeIcon;
 
 
     private List<Arrow> arrowsPool;
@@ -71,6 +74,9 @@ public class Player : GroundDetection
     }
 
     private bool isRecharge;
+    public bool IsRecharge { get;}
+    public Action OnShooting;
+    private float rechargeTimer;
 
     public void Start()
     {
@@ -81,19 +87,7 @@ public class Player : GroundDetection
             arrowsPool.Add(arrowTemp);
             arrowTemp.gameObject.SetActive(false);
         }
-        
-    }
-
-    public void SetDamage(int damage)
-    {
-        playerDamage += damage;
-
-        for(int i = 0; i < arrowsCount; i++)
-        {
-            var arrowDamage = arrowsPool[i].GetComponent<TriggerDamage>();
-            arrowDamage.Damage = playerDamage;
-        }
-
+        rechargeTimer = rechargeTime;
     }
 
     void Update()
@@ -126,8 +120,23 @@ public class Player : GroundDetection
         if (direction.x < 0)
             spriteRenderer.flipX = true;
 
+
         CheckFall();
         CheckShoot();
+        RechargeTimer();
+
+    }
+
+    public void SetDamage(int damage)
+    {
+        playerDamage += damage;
+
+        for (int i = 0; i < arrowsCount; i++)
+        {
+            var arrowDamage = arrowsPool[i].GetComponent<TriggerDamage>();
+            arrowDamage.Damage = playerDamage;
+        }
+
     }
 
     public void CheckShoot()
@@ -138,7 +147,7 @@ public class Player : GroundDetection
             {
                 animator.SetTrigger("shooting");
                 isRecharge = true;
-                StartCoroutine(Recharge());
+                StartCoroutine(RechargeDelay());
             }
         }
     }
@@ -164,7 +173,7 @@ public class Player : GroundDetection
         }
     }
 
-    private IEnumerator Recharge()
+    private IEnumerator RechargeDelay()
     {
         yield return new WaitForSeconds(rechargeTime);
         isRecharge = false;
@@ -192,5 +201,20 @@ public class Player : GroundDetection
         currentArrow.transform.parent = arrowSpawnPoint;
         currentArrow.transform.position = arrowSpawnPoint.transform.position;
         currentArrow.gameObject.SetActive(false);
+    }
+
+    private void RechargeTimer()
+    {
+        if(isRecharge && rechargeTime > 0f)
+        {
+            rechargeIcon.SetActive(true);
+            var reTime = (rechargeTimer -= 1 * Time.deltaTime)/rechargeTime;
+            var icon = rechargeIcon.GetComponent<Image>();
+            icon.fillAmount = reTime;
+        }
+        if(isRecharge == false) { 
+            rechargeTimer = rechargeTime;
+            rechargeIcon.SetActive(false);
+        }
     }
 }
