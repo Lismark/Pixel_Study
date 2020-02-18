@@ -56,7 +56,7 @@ public class Player : GroundDetection
     [SerializeField] private int arrowsCount = 3;
     [SerializeField] private BuffReciever buffReciever;
     [SerializeField] private GameObject rechargeIcon;
-
+    [SerializeField] UICharacterController controller;
 
     private List<Arrow> arrowsPool;
     private Arrow currentArrow;
@@ -88,44 +88,65 @@ public class Player : GroundDetection
             arrowTemp.gameObject.SetActive(false);
         }
         rechargeTimer = rechargeTime;
+        //controller.Left.onPointerDown.AddListener();
+        //controller.Fire.onClick.AddListener(CheckShoot);
     }
 
-    void Update()
+    void FixedUpdate()
+    {
+        Move();
+        CheckFall();
+        RechargeTimer();
+
+    }
+
+    private void Move()
     {
         animator.SetBool("IsGrounded", IsGrounded);
         if (!isJumping && !IsGrounded)
             animator.SetTrigger("startFall");
         isJumping = isJumping && !IsGrounded;
         direction = Vector3.zero;
+#if UNITY_EDITOR
         if (Input.GetKey(KeyCode.A))
             direction = Vector3.left;
+
         if (Input.GetKey(KeyCode.D))
             direction = Vector3.right;
-        if (Input.GetKey(KeyCode.S))
-            direction = Vector3.down;
-        direction *= moveSpeed;
-        direction.y = rigidbody.velocity.y;
-        rigidbody.velocity = direction;
-
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded)
+        if (IsGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             animator.SetTrigger("startJump");
             rigidbody.AddForce(Vector2.up * force, ForceMode2D.Impulse);
             isJumping = true;
         }
+#endif
+        if (controller.Left.IsPressed)
+            direction = Vector3.left;
+
+        if (controller.Right.IsPressed)
+            direction = Vector3.right;
+
+        direction *= moveSpeed;
+        direction.y = rigidbody.velocity.y;
+        rigidbody.velocity = direction;
+
         animator.SetFloat("Speed", Mathf.Abs(direction.x));
 
         if (direction.x > 0)
             spriteRenderer.flipX = false;
         if (direction.x < 0)
             spriteRenderer.flipX = true;
-
-
-        CheckFall();
-        CheckShoot();
-        RechargeTimer();
-
     }
+    private void Jump()
+    {
+        if (IsGrounded)
+        {
+            animator.SetTrigger("startJump");
+            rigidbody.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+            isJumping = true;
+        }
+    }
+
 
     public void SetDamage(int damage)
     {
@@ -141,15 +162,12 @@ public class Player : GroundDetection
 
     public void CheckShoot()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
             if (!isRecharge) 
             {
                 animator.SetTrigger("shooting");
                 isRecharge = true;
                 StartCoroutine(RechargeDelay());
             }
-        }
     }
     void Shooting()
     {

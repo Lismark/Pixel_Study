@@ -439,6 +439,7 @@ MonoBehaviour:
   arrowsCount: 3
   buffReciever: {fileID: 5644531366866282571}
   rechargeIcon: {fileID: 151805095}
+  controller: {fileID: 0}
 --- !u!114 &674020442
 MonoBehaviour:
   m_ObjectHideFlags: 0
