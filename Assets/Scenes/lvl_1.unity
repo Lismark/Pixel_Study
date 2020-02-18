@@ -716,7 +716,7 @@ RectTransform:
   - {fileID: 539721024}
   - {fileID: 392783253}
   m_Father: {fileID: 715979089}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1158,7 +1158,7 @@ RectTransform:
   m_Children:
   - {fileID: 667879145}
   m_Father: {fileID: 715979089}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -1208,6 +1208,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 151805095, guid: 73a37f72a4bf04b4e8a6af42741a79d5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2814501162987950765, guid: 73a37f72a4bf04b4e8a6af42741a79d5,
         type: 3}
       propertyPath: UIcontroller
@@ -2141,8 +2145,8 @@ RectTransform:
   - {fileID: 308628898}
   - {fileID: 1291111243}
   - {fileID: 798716547}
-  - {fileID: 499207281}
   - {fileID: 386882327}
+  - {fileID: 499207281}
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

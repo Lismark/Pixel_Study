@@ -92,7 +92,7 @@ public class Player : GroundDetection
         //controller.Fire.onClick.AddListener(CheckShoot);
     }
 
-    void FixedUpdate()
+    void Update()
     {
         Move();
         CheckFall();
